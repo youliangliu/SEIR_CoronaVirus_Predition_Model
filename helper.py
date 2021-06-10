@@ -1,5 +1,6 @@
 import numpy as np
 import scipy
+import scipy.ndimage.interpolation
 import dateutil.parser
 import datetime
 from collections import defaultdict
@@ -52,6 +53,11 @@ def get_country_xcdr(country, real_data):
         result.append((day, data_dict[day][0], data_dict[day][1], data_dict[day][2]))
     return np.array(result)
 
+def model_to_world_time(X, XCDR_data):
+    X2 = np.array(X, dtype=np.dtype('M8[D]'))
+    for i, x in enumerate(X):
+        X2[i] = min(XCDR_data[:,0]) + datetime.timedelta(days=int(x))
+    return X2
 
 
 if __name__ == '__main__':
