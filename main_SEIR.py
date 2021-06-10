@@ -6,8 +6,6 @@ import matplotlib.widgets  # Cursor
 import matplotlib.dates
 import matplotlib.ticker
 
-import shared
-
 import helper
 
 COUNTRY = 'Germany'  # e.g. 'all' South Korea' 'France'  'Republic of Korea' 'Italy' 'Germany'  'US' 'Spain'
@@ -92,8 +90,8 @@ U = I * ICU_rate * time_in_hospital / time_infected
 P = I / population * 1000000 # probability of random person to be infected# scale for short infectious time vs. real time in hospital
 
 # timeline: exposed, infectious, symptoms, at home, hospital, ICU
-F = shared.delay(F, presymptom_lag + symptom_to_hospital_lag + test_lag + communication_lag)  # found in tests and officially announced; from I
-U = shared.delay(U, presymptom_lag + symptom_to_hospital_lag + hospital_to_ICU_lag)  # ICU  from I before delay
+F = helper.delay(F, presymptom_lag + symptom_to_hospital_lag + test_lag + communication_lag)  # found in tests and officially announced; from I
+U = helper.delay(U, presymptom_lag + symptom_to_hospital_lag + hospital_to_ICU_lag)  # ICU  from I before delay
 
 FC = np.cumsum(F)
 
@@ -106,7 +104,7 @@ for i, tt in enumerate(t):
     R_prev = R[i]
     D_prev = D[i]
 
-D = shared.delay(D, -time_infected + time_presymptom +symptom_to_hospital_lag + time_in_hospital + communication_lag)  # deaths  from R
+D = helper.delay(D, -time_infected + time_presymptom +symptom_to_hospital_lag + time_in_hospital + communication_lag)  # deaths  from R
 
 
 
@@ -137,7 +135,7 @@ ax.plot(XCDR_data[:,0], XCDR_data[:,2], 'x', color='black', alpha=0.5, lw=1, lab
 
 # set model time to real world time
 X = np.arange(total_days)
-X = shared.model_to_world_time(X - dataOffset, XCDR_data)
+X = helper.model_to_world_time(X - dataOffset, XCDR_data)
 
 # model data
 #ax.plot(X, S, 'b', alpha=0.5, lw=2, label='Susceptible')
